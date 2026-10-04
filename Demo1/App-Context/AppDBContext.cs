@@ -20,7 +20,7 @@ namespace Demo1.App_Context
             //Category
             modelBuilder.Entity<Category>().HasKey(a => a.CategoryId);
             modelBuilder.Entity<Category>().HasMany(a => a.Vehicles).WithOne(a => a.Category)
-                .HasForeignKey(a => a.Id).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(a => a.CategoryId).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Category>().HasIndex(a => a.Name).IsUnique();
             //Sale
             modelBuilder.Entity<Sale>().HasKey(a => a.SaleId);
@@ -33,7 +33,7 @@ namespace Demo1.App_Context
             //vehicle
             modelBuilder.Entity<Vehicle>().HasKey(a => a.VehicleId);
             modelBuilder.Entity<Vehicle>().HasOne(a => a.Sale).WithOne(a => a.Vehicle)
-                .HasForeignKey<Sale>(a => a.SaleId).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey<Sale>(a => a.VehicleId).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Vehicle>().HasIndex(a => a.VIN).IsUnique();
             modelBuilder.Entity<Vehicle>().Property(a => a.Price).HasPrecision(12, 2);
             modelBuilder.Entity<Vehicle>().Property(a => a.Status).HasDefaultValue("Available");
@@ -67,7 +67,7 @@ namespace Demo1.App_Context
                     FuelType = "Gasoline",
                     Transmission = "Automatic",
                     Status = "Available",
-                    Id = 2
+                    CategoryId = 2
                 },
                 new Vehicle
                 {
@@ -82,7 +82,7 @@ namespace Demo1.App_Context
                     FuelType = "Gasoline",
                     Transmission = "Manual",
                     Status = "Available",
-                    Id =1
+                    CategoryId =1
                     
                 },
                 new Vehicle
@@ -98,7 +98,7 @@ namespace Demo1.App_Context
                     FuelType = "Diesel",
                     Transmission = "Automatic",
                     Status = "Available",
-                    Id =2
+                    CategoryId =2
                     
                 }
 

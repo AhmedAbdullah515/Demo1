@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Demo1.Models
+namespace Demo1.DTOs.VehicleDTOs
 {
-    public class Vehicle
+    public class VehicleDTO
     {
         public int VehicleId { get; set; }
         [Required]
@@ -17,10 +16,10 @@ namespace Demo1.Models
         [MaxLength(50)]
         public string? Color { get; set; }
         [Required]
-        [Range(1.0,double.MaxValue)]
+        [MinLength(1)]
         public decimal Price { get; set; }
         [Required]
-        [Range(0,int.MaxValue)]
+        [MinLength(1)]
         public int Mileage1 { get; set; }
         [Required]
         [MaxLength(17)]
@@ -31,9 +30,6 @@ namespace Demo1.Models
         public string? Transmission { get; set; }
         [Required]
         public string Status { get; set; }
-        public int  CategoryId { get; set; }
-        public Category Category { get; set; }
-        public Sale Sale { get; set; }
-
+        public string CustomerName { get; set; }
     }
 }

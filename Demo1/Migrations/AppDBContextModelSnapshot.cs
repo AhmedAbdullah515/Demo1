@@ -258,7 +258,10 @@ namespace Demo1.Migrations
             modelBuilder.Entity("Demo1.Models.Sale", b =>
                 {
                     b.Property<int>("SaleId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaleId"));
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
@@ -290,6 +293,9 @@ namespace Demo1.Migrations
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("EmployeeId");
+
+                    b.HasIndex("VehicleId")
+                        .IsUnique();
 
                     b.ToTable("Sales");
 
@@ -337,6 +343,9 @@ namespace Demo1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VehicleId"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Color")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -344,9 +353,6 @@ namespace Demo1.Migrations
                     b.Property<string>("FuelType")
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<string>("Make")
                         .IsRequired()
@@ -385,7 +391,7 @@ namespace Demo1.Migrations
 
                     b.HasKey("VehicleId");
 
-                    b.HasIndex("Id");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("VIN")
                         .IsUnique();
@@ -396,9 +402,9 @@ namespace Demo1.Migrations
                         new
                         {
                             VehicleId = 1,
+                            CategoryId = 2,
                             Color = "Blue",
                             FuelType = "Gasoline",
-                            Id = 2,
                             Make = "Toyota",
                             Mileage1 = 15000,
                             Model = "Camry",
@@ -411,9 +417,9 @@ namespace Demo1.Migrations
                         new
                         {
                             VehicleId = 2,
+                            CategoryId = 1,
                             Color = "Red",
                             FuelType = "Gasoline",
-                            Id = 1,
                             Make = "Honda",
                             Mileage1 = 20000,
                             Model = "Civic",
@@ -426,9 +432,9 @@ namespace Demo1.Migrations
                         new
                         {
                             VehicleId = 3,
+                            CategoryId = 2,
                             Color = "Black",
                             FuelType = "Diesel",
-                            Id = 2,
                             Make = "Ford",
                             Mileage1 = 10000,
                             Model = "F-150",
@@ -467,7 +473,7 @@ namespace Demo1.Migrations
 
                     b.HasOne("Demo1.Models.Vehicle", "Vehicle")
                         .WithOne("Sale")
-                        .HasForeignKey("Demo1.Models.Sale", "SaleId")
+                        .HasForeignKey("Demo1.Models.Sale", "VehicleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -482,7 +488,7 @@ namespace Demo1.Migrations
                 {
                     b.HasOne("Demo1.Models.Category", "Category")
                         .WithMany("Vehicles")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

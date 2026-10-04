@@ -1,5 +1,7 @@
 
 using Demo1.App_Context;
+using Demo1.Mapping;
+using Demo1.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo1
@@ -18,6 +20,8 @@ namespace Demo1
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AppDBContext>(a => a.UseSqlServer(builder.Configuration
                 .GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IUitOfWork, UnitWork>();
+            builder.Services.AddAutoMapper(a => a.AddProfile<MappingProfile>());
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

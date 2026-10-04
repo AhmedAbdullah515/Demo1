@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Demo1.Migrations
 {
     /// <inheritdoc />
-    public partial class i : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,14 +76,14 @@ namespace Demo1.Migrations
                     FuelType = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Transmission = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Available"),
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vehicles", x => x.VehicleId);
                     table.ForeignKey(
-                        name: "FK_Vehicles_Categories_Id",
-                        column: x => x.Id,
+                        name: "FK_Vehicles_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Restrict);
@@ -116,7 +116,8 @@ namespace Demo1.Migrations
                 name: "Sales",
                 columns: table => new
                 {
-                    SaleId = table.Column<int>(type: "int", nullable: false),
+                    SaleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     SaleDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SalePrice = table.Column<decimal>(type: "decimal(12,2)", precision: 12, scale: 2, nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
@@ -141,8 +142,8 @@ namespace Demo1.Migrations
                         principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Sales_Vehicles_SaleId",
-                        column: x => x.SaleId,
+                        name: "FK_Sales_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
                         principalTable: "Vehicles",
                         principalColumn: "VehicleId",
                         onDelete: ReferentialAction.Restrict);
@@ -190,12 +191,12 @@ namespace Demo1.Migrations
 
             migrationBuilder.InsertData(
                 table: "Vehicles",
-                columns: new[] { "VehicleId", "Color", "FuelType", "Id", "Make", "Mileage1", "Model", "Price", "Status", "Transmission", "VIN", "Year" },
+                columns: new[] { "VehicleId", "CategoryId", "Color", "FuelType", "Make", "Mileage1", "Model", "Price", "Status", "Transmission", "VIN", "Year" },
                 values: new object[,]
                 {
-                    { 1, "Blue", "Gasoline", 2, "Toyota", 15000, "Camry", 25000m, "Available", "Automatic", "1HGCM82633A123456", 2020 },
-                    { 2, "Red", "Gasoline", 1, "Honda", 20000, "Civic", 20000m, "Available", "Manual", "1HGCM82633A654321", 2019 },
-                    { 3, "Black", "Diesel", 2, "Ford", 10000, "F-150", 35000m, "Available", "Automatic", "1FTFW1E50MFA12345", 2021 }
+                    { 1, 2, "Blue", "Gasoline", "Toyota", 15000, "Camry", 25000m, "Available", "Automatic", "1HGCM82633A123456", 2020 },
+                    { 2, 1, "Red", "Gasoline", "Honda", 20000, "Civic", 20000m, "Available", "Manual", "1HGCM82633A654321", 2019 },
+                    { 3, 2, "Black", "Diesel", "Ford", 10000, "F-150", 35000m, "Available", "Automatic", "1FTFW1E50MFA12345", 2021 }
                 });
 
             migrationBuilder.InsertData(
@@ -249,9 +250,15 @@ namespace Demo1.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vehicles_Id",
+                name: "IX_Sales_VehicleId",
+                table: "Sales",
+                column: "VehicleId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_CategoryId",
                 table: "Vehicles",
-                column: "Id");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_VIN",
